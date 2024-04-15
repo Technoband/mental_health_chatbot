@@ -22,10 +22,10 @@ TOKENIZER_URL = './models/tokenizer.pkl'
 model = load_model(MODEL_URL)
 
 # Load the model from the file
-model = load_model(LABEL_ENCODER_URL)
+label_encoder = load_model(LABEL_ENCODER_URL)
 
 # Load the model from the file
-model = load_model(TOKENIZER_URL)
+tokenizer= load_model(TOKENIZER_URL)
 
 # Load the model, label encoder, and tokenizer from GitHub
 # model = load_model(requests.get(MODEL_URL, allow_redirects=True))
@@ -51,7 +51,7 @@ def predict():
 
     # Make prediction using the model
     y_pred = model.predict(x_test)
-    predicted_label = label_encoder_layer.inverse_transform([np.argmax(y_pred)])[0]
+    predicted_label = label_encoder.inverse_transform([np.argmax(y_pred)])[0]
 
     return jsonify({'response': predicted_label})
 

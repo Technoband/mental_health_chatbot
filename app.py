@@ -14,41 +14,18 @@ from keras.layers import TFSMLayer
 # tokenizer = joblib.load('D:/mha/tokenizer.pkl')
 # Define paths for model files on GitHub
 
-MODEL_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/lstm_model.h5'
-LABEL_ENCODER_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/label_encoder.pkl'
-TOKENIZER_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/tokenizer.pkl'
+MODEL_URL = './models/lstm_model.h5'
+LABEL_ENCODER_URL = './models/label_encoder.pkl'
+TOKENIZER_URL = './models/tokenizer.pkl'
 
-response = requests.get(MODEL_URL)
-response.raise_for_status()
-# Load the model from the response content
-# model = load_model(BytesIO(response.content))
-# Save the content to a file
-# Download and load the tokenizer
-tokenizer_response = requests.get(TOKENIZER_URL)
-tokenizer = joblib.load(tokenizer_response.content)
-
-# Download and load the model
-model_response = requests.get(MODEL_URL)
+# Load the model from the file
 model = load_model(MODEL_URL)
 
 # Load the model from the file
-# model = load_model('lstm_model.h5')
-
-
-# label_encoder = joblib.load(BytesIO(response_label_encoder.content))
-# Save the content to a file
-
-
-# Load the TensorFlow SavedModel using TFSMLayer
-label_encoder_layer = TFSMLayer("label_encoder.pkl", call_endpoint='serving_default')
-# Load the model from the file
-# model = load_model('label_encoder.pkl')
-
-
-
+model = load_model(LABEL_ENCODER_URL)
 
 # Load the model from the file
-
+model = load_model(TOKENIZER_URL)
 
 # Load the model, label encoder, and tokenizer from GitHub
 # model = load_model(requests.get(MODEL_URL, allow_redirects=True))

@@ -25,7 +25,7 @@
         <li><strong>Flask:</strong> Web framework for building the chatbot API.</li>
         <li><strong>TensorFlow:</strong> Deep learning library for natural language processing tasks.</li>
         <li><strong>scikit-learn:</strong> Machine learning library for data preprocessing and model evaluation.</li>
-        <li><strong>HTML/CSS/JavaScript:</strong> Frontend development for web-based chat interface.</li>
+        <li><strong>Flutter/Dart:</strong> Frontend development for web-based chat interface.</li>
     </ul>
     <h2>Getting Started</h2>
     <p>To use the Mental Health Chatbot, simply visit the provided URL and start interacting with the chat interface. For developers interested in contributing to the project, refer to the project documentation and contribution guidelines in the repository.</p>

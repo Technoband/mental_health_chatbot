@@ -70,7 +70,7 @@ def predict():
 
     # Make prediction using the model
     y_pred = model.predict(x_test)
-    predicted_label = label_encoder_layer.inverse_transform([np.argmax(y_pred)])[0]
+    predicted_label = label_encoder.inverse_transform([np.argmax(y_pred)])[0]
 
     return jsonify({'response': predicted_label})
 

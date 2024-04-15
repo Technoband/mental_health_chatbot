@@ -5,7 +5,8 @@ import requests
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
-from keras.layers import TFSMLayer
+# from keras.layers import TFSMLayer
+from tensorflow.keras.layers import TFSMLayer
 
 
 # Load the model, label encoder, and tokenizer
@@ -18,6 +19,14 @@ MODEL_URL = './models/lstm_model.h5'
 LABEL_ENCODER_URL = './models/label_encoder.pkl'
 TOKENIZER_URL = './models/tokenizer.pkl'
 
+response = requests.get(LABEL_ENCODER_URL)
+
+# Load the label encoder
+label_encoder = joblib.load(response.content)
+
+# Assuming `data` is your input data that needs to be encoded
+# encoded_data = label_encoder.transform(data)
+
 # Load the model from the file
 model = load_model(MODEL_URL)
 
@@ -26,6 +35,8 @@ label_encoder = load_model(LABEL_ENCODER_URL)
 
 # Load the model from the file
 tokenizer= load_model(TOKENIZER_URL)
+
+
 
 # Load the model, label encoder, and tokenizer from GitHub
 # model = load_model(requests.get(MODEL_URL, allow_redirects=True))

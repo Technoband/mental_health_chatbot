@@ -33,7 +33,14 @@ try:
 except Exception as e:
     print("Error:", e)
 # label_encoder = joblib.load(LABEL_ENCODER_URL)
-model = joblib.load(MODEL_URL)
+# Attempt to download the file
+try:
+    with urllib.request.urlopen(MODEL_URL) as response:
+        # Load the LSTM model
+        model = joblib.load(response)
+except Exception as e:
+    print("Error:", e)
+# model = joblib.load(MODEL_URL)
 tokenizer = joblib.load(TOKENIZER_URL)
 
 # Load the model from the file

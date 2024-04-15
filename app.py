@@ -6,7 +6,7 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
 from keras.layers import TFSMLayer
-
+import urllib.request
 
 # Load the model, label encoder, and tokenizer
 # model = load_model('D:/mha/lstm_model.h5')
@@ -25,14 +25,13 @@ TOKENIZER_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chat
 
 # Load the model from the file
 # model = load_model('label_encoder.pkl')
-response = requests.get(LABEL_ENCODER_URL)
-
-# Check if download was successful
-if response.status_code == 200:
-    # Load the label encoder
-    label_encoder = joblib.load(response.content)
-else:
-    print("Failed to download the label encoder file.")
+# Attempt to download the file
+try:
+    with urllib.request.urlopen(LABEL_ENCODER_URL) as response:
+        # Load the label encoder
+        label_encoder = joblib.load(response)
+except Exception as e:
+    print("Error:", e)
 # label_encoder = joblib.load(LABEL_ENCODER_URL)
 model = joblib.load(MODEL_URL)
 tokenizer = joblib.load(TOKENIZER_URL)

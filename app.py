@@ -41,7 +41,14 @@ try:
 except Exception as e:
     print("Error:", e)
 # model = joblib.load(MODEL_URL)
-tokenizer = joblib.load(TOKENIZER_URL)
+# Attempt to download the file
+try:
+    with urllib.request.urlopen(TOKENIZER_URL) as response:
+        # Load the tokenizer
+        tokenizer = joblib.load(response)
+except Exception as e:
+    print("Error:", e)
+# tokenizer = joblib.load(TOKENIZER_URL)
 
 # Load the model from the file
 

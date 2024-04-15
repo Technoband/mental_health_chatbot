@@ -25,7 +25,15 @@ TOKENIZER_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chat
 
 # Load the model from the file
 # model = load_model('label_encoder.pkl')
-label_encoder = joblib.load(LABEL_ENCODER_URL)
+response = requests.get(LABEL_ENCODER_URL)
+
+# Check if download was successful
+if response.status_code == 200:
+    # Load the label encoder
+    label_encoder = joblib.load(response.content)
+else:
+    print("Failed to download the label encoder file.")
+# label_encoder = joblib.load(LABEL_ENCODER_URL)
 model = joblib.load(MODEL_URL)
 tokenizer = joblib.load(TOKENIZER_URL)
 

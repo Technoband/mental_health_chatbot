@@ -6,12 +6,15 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
 from io import BytesIO
+from keras.layers import TFSMLayer
 
+print("Num GPUs Available: ", len(tensorflow.config.experimental.list_physical_devices('GPU')))
 # Load the model, label encoder, and tokenizer
 # model = load_model('D:/mha/lstm_model.h5')
 # label_encoder = joblib.load('D:/mha/label_encoder.pkl')
 # tokenizer = joblib.load('D:/mha/tokenizer.pkl')
 # Define paths for model files on GitHub
+
 MODEL_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/lstm_model.h5'
 LABEL_ENCODER_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/label_encoder.pkl'
 TOKENIZER_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/tokenizer.pkl'
@@ -21,32 +24,32 @@ response.raise_for_status()
 # Load the model from the response content
 # model = load_model(BytesIO(response.content))
 # Save the content to a file
-with open('lstm_model.h5', 'wb') as f:
-    f.write(response.content)
+# Download and load the tokenizer
+tokenizer_response = requests.get(TOKENIZER_URL)
+tokenizer = joblib.load(tokenizer_response.content)
+
+# Download and load the model
+model_response = requests.get(MODEL_URL)
+model = load_model(MODEL_URL)
 
 # Load the model from the file
-model = load_model('lstm_model.h5')
+# model = load_model('lstm_model.h5')
 
-# Download and load label encoder
-response_label_encoder = requests.get(LABEL_ENCODER_URL)
-response_label_encoder.raise_for_status()
+
 # label_encoder = joblib.load(BytesIO(response_label_encoder.content))
 # Save the content to a file
-with open('label_encoder.pkl', 'wb') as f:
-    f.write(response.content)
+
+
+# Load the TensorFlow SavedModel using TFSMLayer
+label_encoder_layer = TFSMLayer("label_encoder.pkl", call_endpoint='serving_default')
+# Load the model from the file
+# model = load_model('label_encoder.pkl')
+
+
+
 
 # Load the model from the file
-model = load_model('label_encoder.pkl')
 
-# Download and load tokenizer
-response_tokenizer = requests.get(TOKENIZER_URL)
-response_tokenizer.raise_for_status()
-# tokenizer = joblib.load(BytesIO(response_tokenizer.content))
-with open('tokenizer.pkl', 'wb') as f:
-    f.write(response.content)
-
-# Load the model from the file
-model = load_model('tokenizer.pkl')
 
 # Load the model, label encoder, and tokenizer from GitHub
 # model = load_model(requests.get(MODEL_URL, allow_redirects=True))

@@ -5,8 +5,7 @@ import requests
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
-# from keras.layers import TFSMLayer
-from tensorflow.keras.layers import TFSMLayer
+from keras.layers import TFSMLayer
 
 
 # Load the model, label encoder, and tokenizer
@@ -15,27 +14,22 @@ from tensorflow.keras.layers import TFSMLayer
 # tokenizer = joblib.load('D:/mha/tokenizer.pkl')
 # Define paths for model files on GitHub
 
-MODEL_URL = './models/lstm_model.h5'
-LABEL_ENCODER_URL = './models/label_encoder.pkl'
-TOKENIZER_URL = './models/tokenizer.pkl'
+MODEL_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/lstm_model.h5'
+LABEL_ENCODER_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/label_encoder.pkl'
+TOKENIZER_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/tokenizer.pkl'
 
-response = requests.get(LABEL_ENCODER_URL)
-
-# Load the label encoder
-label_encoder = joblib.load(response.content)
-
-# Assuming `data` is your input data that needs to be encoded
-# encoded_data = label_encoder.transform(data)
 
 # Load the model from the file
-model = load_model(MODEL_URL)
+# model = load_model('lstm_model.h5')
+
 
 # Load the model from the file
-label_encoder = load_model(LABEL_ENCODER_URL)
+# model = load_model('label_encoder.pkl')
+label_encoder = joblib.load(LABEL_ENCODER_URL)
+model = joblib.load(MODEL_URL)
+tokenizer = joblib.load(TOKENIZER_URL)
 
 # Load the model from the file
-tokenizer= load_model(TOKENIZER_URL)
-
 
 
 # Load the model, label encoder, and tokenizer from GitHub
@@ -62,7 +56,7 @@ def predict():
 
     # Make prediction using the model
     y_pred = model.predict(x_test)
-    predicted_label = label_encoder.inverse_transform([np.argmax(y_pred)])[0]
+    predicted_label = label_encoder_layer.inverse_transform([np.argmax(y_pred)])[0]
 
     return jsonify({'response': predicted_label})
 

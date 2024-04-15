@@ -5,10 +5,9 @@ import requests
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
-from io import BytesIO
 from keras.layers import TFSMLayer
 
-print("Num GPUs Available: ", len(tensorflow.config.experimental.list_physical_devices('GPU')))
+
 # Load the model, label encoder, and tokenizer
 # model = load_model('D:/mha/lstm_model.h5')
 # label_encoder = joblib.load('D:/mha/label_encoder.pkl')
@@ -75,7 +74,7 @@ def predict():
 
     # Make prediction using the model
     y_pred = model.predict(x_test)
-    predicted_label = label_encoder.inverse_transform([np.argmax(y_pred)])[0]
+    predicted_label = label_encoder_layer.inverse_transform([np.argmax(y_pred)])[0]
 
     return jsonify({'response': predicted_label})
 

@@ -53,7 +53,6 @@ except Exception as e:
 # Load the model from the file
 
 
-# Load the model, label encoder, and tokenizer from GitHub
 # model = load_model(requests.get(MODEL_URL, allow_redirects=True))
 # label_encoder = joblib.load(requests.get(LABEL_ENCODER_URL, allow_redirects=True).content)
 # tokenizer = joblib.load(requests.get(TOKENIZER_URL, allow_redirects=True).content)

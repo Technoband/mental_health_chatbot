@@ -21,7 +21,6 @@ DF_EXPANDED_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_ch
 MAX_SEQUENCE_LENGTH = 100
 
 # Load model and dependencies
-# Load model and dependencies
 import io
 
 def load_resources():
@@ -57,12 +56,9 @@ def load_resources():
     response.raise_for_status()
     df_expanded = pd.read_csv(io.StringIO(response.content.decode('utf-8')))
 
-
-
 # Initialize resources
 load_resources()
 
-# Function to generate answer
 # Function to generate answer
 def generate_answer(pattern, negative_count):
     text = []
@@ -72,7 +68,7 @@ def generate_answer(pattern, negative_count):
     txt = " ".join(txt)
     text.append(txt)
 
-    # Tokenize and pad the input pattern
+    # Tokenize the input pattern
     x_test = tokenizer.texts_to_sequences(text)
     if not x_test:  # Check if x_test is empty
         return negative_count, None  # Return without processing if input is empty
@@ -110,8 +106,6 @@ def generate_answer(pattern, negative_count):
     response = random.choice(responses)
     return negative_count, response
 
-
-
 @app.route('/chatbot', methods=['POST'])
 def chatbot():
     data = request.get_json()
@@ -125,5 +119,5 @@ def chatbot():
 
     return jsonify({'response': response, 'negative_count': negative_count})
 
-# if __name__ == "__main__":
-#     app.run(debug=True, host='0.0.0.0')
+if __name__ == "__main__":
+    app.run(debug=True, host='0.0.0.0')

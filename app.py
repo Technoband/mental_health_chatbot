@@ -76,8 +76,12 @@ def generate_answer(pattern, negative_count):
     if not x_test:  # Check if x_test is empty
         return negative_count, None  # Return without processing if input is empty
 
-    x_test = np.array(x_test).squeeze()
-    x_test = pad_sequences([x_test], padding='post', maxlen=MAX_SEQUENCE_LENGTH)
+    # Pad the sequences only if x_test contains sequences
+    if isinstance(x_test[0], list):
+        x_test = pad_sequences(x_test, padding='post', maxlen=MAX_SEQUENCE_LENGTH)
+    else:
+        # Handle case where x_test contains a single sequence
+        x_test = pad_sequences([x_test], padding='post', maxlen=MAX_SEQUENCE_LENGTH)
 
     # Predict the intent using the model
     y_pred = model.predict(x_test)
@@ -105,6 +109,7 @@ def generate_answer(pattern, negative_count):
     response = random.choice(responses)
     return negative_count, response
 
+
 @app.route('/chatbot', methods=['POST'])
 def chatbot():
     data = request.get_json()
@@ -119,4 +124,4 @@ def chatbot():
     return jsonify({'response': response, 'negative_count': negative_count})
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=8080)
+    app.run(debug=True, host='0.0.0.0')

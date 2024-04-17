@@ -5,6 +5,7 @@ import requests
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
+import tempfile
 
 # Define paths for model files on GitHub
 MODEL_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/lstm_model.h5'
@@ -19,26 +20,27 @@ label_encoder = None
 tokenizer = None
 MAX_SEQUENCE_LENGTH = 100
 
-import tempfile
-
 def load_model_and_dependencies():
     global model, label_encoder, tokenizer
     try:
-        # Download model file
+        # Download and load model
         with tempfile.NamedTemporaryFile(suffix='.h5', delete=False) as tmp_file:
             response = requests.get(MODEL_URL, allow_redirects=True)
+            response.raise_for_status()  # Raise exception for non-200 status code
             tmp_file.write(response.content)
             tmp_file_path = tmp_file.name
-        
-        # Load model
         model = load_model(tmp_file_path)
 
         # Load label encoder
-        label_encoder = joblib.load(requests.get(LABEL_ENCODER_URL, allow_redirects=True).content)
-        
+        response = requests.get(LABEL_ENCODER_URL, allow_redirects=True)
+        response.raise_for_status()  # Raise exception for non-200 status code
+        label_encoder = joblib.load(response.content)
+
         # Load tokenizer
-        tokenizer = joblib.load(requests.get(TOKENIZER_URL, allow_redirects=True).content)
-        
+        response = requests.get(TOKENIZER_URL, allow_redirects=True)
+        response.raise_for_status()  # Raise exception for non-200 status code
+        tokenizer = joblib.load(response.content)
+
         print("Model and dependencies loaded successfully.")
     except Exception as e:
         print("Error loading model and dependencies:", e)
@@ -73,5 +75,5 @@ def predict():
     except Exception as e:
         return jsonify({'error': 'An error occurred while processing the request'}), 500
 
-if __name__ == "__main__":
-    app.run(debug=True)
+# if __name__ == "__main__":
+#     app.run(debug=True)

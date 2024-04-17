@@ -26,36 +26,36 @@ TOKENIZER_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chat
 # Load the model from the file
 # model = load_model('label_encoder.pkl')
 # Attempt to download the file
-try:
-    with urllib.request.urlopen(LABEL_ENCODER_URL) as response:
-        # Load the label encoder
-        label_encoder = joblib.load(response)
-except Exception as e:
-    print("Error:", e)
+# try:
+#     with urllib.request.urlopen(LABEL_ENCODER_URL) as response:
+#         # Load the label encoder
+#         label_encoder = joblib.load(response)
+# except Exception as e:
+#     print("Error:", e)
 # label_encoder = joblib.load(LABEL_ENCODER_URL)
 # Attempt to download the file
-try:
-    with urllib.request.urlopen(MODEL_URL) as response:
-        # Load the LSTM model
-        model = joblib.load(response)
-except Exception as e:
-    print("Error:", e)
-# model = joblib.load(MODEL_URL)
-# Attempt to download the file
-try:
-    with urllib.request.urlopen(TOKENIZER_URL) as response:
-        # Load the tokenizer
-        tokenizer = joblib.load(response)
-except Exception as e:
-    print("Error:", e)
+# try:
+#     with urllib.request.urlopen(MODEL_URL) as response:
+#         # Load the LSTM model
+#         model = joblib.load(response)
+# except Exception as e:
+#     print("Error:", e)
+# # model = joblib.load(MODEL_URL)
+# # Attempt to download the file
+# try:
+#     with urllib.request.urlopen(TOKENIZER_URL) as response:
+#         # Load the tokenizer
+#         tokenizer = joblib.load(response)
+# except Exception as e:
+#     print("Error:", e)
 # tokenizer = joblib.load(TOKENIZER_URL)
 
 # Load the model from the file
 
 
-# model = load_model(requests.get(MODEL_URL, allow_redirects=True))
-# label_encoder = joblib.load(requests.get(LABEL_ENCODER_URL, allow_redirects=True).content)
-# tokenizer = joblib.load(requests.get(TOKENIZER_URL, allow_redirects=True).content)
+model = load_model(requests.get(MODEL_URL, allow_redirects=True))
+label_encoder = joblib.load(requests.get(LABEL_ENCODER_URL, allow_redirects=True).content)
+tokenizer = joblib.load(requests.get(TOKENIZER_URL, allow_redirects=True).content)
 
 app = Flask(__name__)
 MAX_SEQUENCE_LENGTH = 100

@@ -63,6 +63,7 @@ def load_resources():
 load_resources()
 
 # Function to generate answer
+# Function to generate answer
 def generate_answer(pattern, negative_count):
     text = []
     txt = re.sub('[^a-zA-Z\']', ' ', pattern)
@@ -110,6 +111,7 @@ def generate_answer(pattern, negative_count):
     return negative_count, response
 
 
+
 @app.route('/chatbot', methods=['POST'])
 def chatbot():
     data = request.get_json()
@@ -123,5 +125,5 @@ def chatbot():
 
     return jsonify({'response': response, 'negative_count': negative_count})
 
-if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
+# if __name__ == "__main__":
+#     app.run(debug=True, host='0.0.0.0')

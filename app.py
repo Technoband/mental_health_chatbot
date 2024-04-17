@@ -8,6 +8,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
 import tempfile
 import pandas as pd
+import io
 
 app = Flask(__name__)
 
@@ -21,8 +22,6 @@ DF_EXPANDED_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_ch
 MAX_SEQUENCE_LENGTH = 100
 
 # Load model and dependencies
-import io
-
 def load_resources():
     global tokenizer, label_encoder, df_expanded, model
     # Download and load model
@@ -58,9 +57,15 @@ def load_resources():
 
 # Initialize resources
 load_resources()
+global negative_words 
+negative_words = ["no", "not", "don't", "can't", "didn't", "won't", "stressed", "depressed", "depress", "stressful", "stress", "anxiety", "nothing", "nobody", "none", "neither", "nor"]
+# Function to analyze input for negative words
+def analyze_input(input_text):
+    return any(word in input_text.lower() for word in negative_words)
 
 # Function to generate answer
 def generate_answer(pattern, negative_count):
+    # Preprocess the user input pattern
     text = []
     txt = re.sub('[^a-zA-Z\']', ' ', pattern)
     txt = txt.lower()
@@ -88,7 +93,7 @@ def generate_answer(pattern, negative_count):
     # Retrieve responses associated with the predicted intent
     responses = df_expanded[df_expanded['tag'] == tag]['responses'].values[0]
 
-    negative_words = ["no", "not", "don't", "can't", "didn't", "won't", "wouldn't", "shouldn't", "couldn't", "isn't", "aren't", "wasn't", "weren't", "haven't", "hasn't", "hadn't", "never", "nowhere", "nothing", "nobody", "none", "neither", "nor"]
+    # negative_words = ["no", "not", "don't", "can't", "didn't", "won't", "wouldn't", "shouldn't", "couldn't", "isn't", "aren't", "wasn't", "weren't", "haven't", "hasn't", "hadn't", "never", "nowhere", "nothing", "nobody", "none", "neither", "nor"]
     # Check if the response is negative
     is_negative = any(response.lower() in pattern.lower() for response in negative_words)
 

@@ -22,16 +22,16 @@ MAX_SEQUENCE_LENGTH = 100
 
 # Load model and dependencies
 # Load model and dependencies
-def load_resources():
-    global model, label_encoder, df_expanded
+import io
 
+def load_resources():
+    global tokenizer, label_encoder, df_expanded, model
     # Download and load model
     with tempfile.NamedTemporaryFile(suffix='.h5', delete=False) as tmp_file:
         response = requests.get(MODEL_URL)
         response.raise_for_status()
         tmp_file.write(response.content)
         model = load_model(tmp_file.name)
-
     # Load the tokenizer from URL and save it to a temporary file
     with tempfile.NamedTemporaryFile(suffix='.pkl', delete=False) as tmp_file:
         response = requests.get(TOKENIZER_URL)
@@ -40,7 +40,6 @@ def load_resources():
         tmp_file_path = tmp_file.name
 
     # Load the tokenizer from the temporary file
-    global tokenizer
     tokenizer = joblib.load(tmp_file_path)
 
     # Download and load label encoder
@@ -51,13 +50,13 @@ def load_resources():
         tmp_file_path = tmp_file.name
 
     # Load the label encoder from the temporary file
-    global label_encoder
     label_encoder = joblib.load(tmp_file_path)
 
     # Download and load expanded responses data
     response = requests.get(DF_EXPANDED_URL)
     response.raise_for_status()
-    df_expanded = pd.read_csv(pd.compat.StringIO(response.content.decode('utf-8')))
+    df_expanded = pd.read_csv(io.StringIO(response.content.decode('utf-8')))
+
 
 
 # Initialize resources

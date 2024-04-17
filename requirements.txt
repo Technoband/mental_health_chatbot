@@ -1,13 +1,8 @@
-python==3.11.9
 Flask
 joblib
 numpy
 scikit-learn
 Gunicorn
-requests==2.31.0
-pandas==2.0.2
-tensorboard==2.16.2
-tensorboard-data-server==0.7.2
+requests
+pandas
 tensorflow==2.16.1
-tensorflow-intel==2.16.1
-tensorflow-io-gcs-filesystem==0.31.0

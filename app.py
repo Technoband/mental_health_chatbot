@@ -3,24 +3,54 @@ import joblib
 import numpy as np
 import random
 import re
+import requests
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
+import tempfile
+import pandas as pd
 
 app = Flask(__name__)
 
-# Load model and dependencies
-model = load_model('https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/lstm_model.h5')  # Update with the path to your saved model
-tokenizer = joblib.load('https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/tokenizer.pkl')  # Update with the path to your saved tokenizer
-label_encoder = joblib.load('https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/label_encoder.pkl')  # Update with the path to your saved label encoder
-df_expanded = joblib.load('https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/df_expanded.csv')
-# Load expanded responses data (df_expanded)
-# You may need to reload your data if it's not available in the current environment
+# Define URLs for resources
+MODEL_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/lstm_model.h5'
+TOKENIZER_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/tokenizer.pkl'
+LABEL_ENCODER_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/label_encoder.pkl'
+DF_EXPANDED_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/df_expanded.csv'
 
 # Define maximum sequence length
 MAX_SEQUENCE_LENGTH = 100
 
+# Load model and dependencies
+def load_resources():
+    global model, tokenizer, label_encoder, df_expanded
+
+    # Download and load model
+    with tempfile.NamedTemporaryFile(suffix='.h5', delete=False) as tmp_file:
+        response = requests.get(MODEL_URL)
+        response.raise_for_status()
+        tmp_file.write(response.content)
+        model = load_model(tmp_file.name)
+
+    # Download and load tokenizer
+    response = requests.get(TOKENIZER_URL)
+    response.raise_for_status()
+    tokenizer = joblib.load(response.content)
+
+    # Download and load label encoder
+    response = requests.get(LABEL_ENCODER_URL)
+    response.raise_for_status()
+    label_encoder = joblib.load(response.content)
+
+    # Download and load expanded responses data
+    response = requests.get(DF_EXPANDED_URL)
+    response.raise_for_status()
+    df_expanded = pd.read_csv(pd.compat.StringIO(response.content.decode('utf-8')))
+
+# Initialize resources
+load_resources()
+
+# Function to generate answer
 def generate_answer(pattern, negative_count):
-    # Preprocess the user input pattern
     text = []
     txt = re.sub('[^a-zA-Z\']', ' ', pattern)
     txt = txt.lower()

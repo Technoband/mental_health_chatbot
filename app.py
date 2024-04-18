@@ -19,7 +19,7 @@ LABEL_ENCODER_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_
 DF_EXPANDED_URL = 'https://raw.githubusercontent.com/Technoband/mental_health_chatbot/main/models/df_expanded.csv'
 
 # Define maximum sequence length
-MAX_SEQUENCE_LENGTH = 100
+MAX_SEQUENCE_LENGTH = 18
 
 # Load model and dependencies
 def load_resources():
